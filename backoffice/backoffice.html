@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+   <!-- Bootstrap CSS -->
+   <link
+   rel="stylesheet"
+   href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+   integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+   crossorigin="anonymous"
+ />
+
+ <!--fontawsome-->
+ <link
+   rel="stylesheet"
+   href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+   integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+   crossorigin="anonymous"
+ />
+ <!-- My Style.css file-->
+ <link rel="stylesheet" href="/style/style.css" />
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand ml-4" href="#">
+          <img src="/imgs/logo.png" height="45" alt="" loading="lazy" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="/index.html"
+                >Home <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">TV Shows</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Movies</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Recently Added</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">My List</a>
+            </li>
+          </ul>
+  
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <i class="fas fa-search mr-2"></i>
+                User
+                <img
+                  src="../imgs/user.png"
+                  height="30"
+                  alt=""
+                  class="mx-2 rounded"
+                />
+              </a>
+              <div
+                class="dropdown-menu dropdown-menu-right"
+                aria-labelledby="navbarDropdown"
+              >
+                <a class="dropdown-item" href="/settings.html">Settings</a>
+                <a class="dropdown-item" href="/profile.html">Profile</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    
+      <div class="row col-md-6">
+      <div class="container-fluid">
+      <div style="margin-left: 40px; margin-top: 50px;" class="row">
+        <h1 style="text-align: start; color: #b4101a;margin-right: 40px;font-weight: 600;">My list</h1>
+        <div class="col-md-4">
+          <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label for="name">Name :</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Write here the event name"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description :</label>
+              <textarea
+                class="form-control"
+                id="description"
+                rows="3"
+                placeholder="Write here the product description"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category :</label>
+                <input
+                  class="form-control"
+                  id="category"
+                  rows="3"
+                  placeholder="Write here the product category"
+                  required
+                ></input>
+              </div>
+
+            <div class="form-group">
+                <label for="name">Image Url :</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="imageURL"
+                  placeholder="Write here the url" 
+                  required
+                />
+              </div>
+           
+              <button
+                class="btn btn-primary"
+                type="submit"
+                value="Submit event"
+              >
+              <span
+              class="spinner-border spinner-border-sm d-none"
+              role="status"
+              aria-hidden="true"
+              id="loadingSpinner"
+            ></span>
+                Send product
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row col-md-6">
+    
+</div>
+
+    <script>
+      //READ => GET https://striveschool-api.herokuapp.com/api/product/ ==> get all the items from API
+      //CREATE => POST https://striveschool-api.herokuapp.com/api/product/ ==> create a new item
+ // CREATE => POST https://striveschool-api.herokuapp.com/api/product/ ==> create a new item
+      // UPDATE => PUT https://striveschool-api.herokuapp.com/api/product/{id} ==> edit a specific item
+      // DELETE => DELETEhttps://striveschool-api.herokuapp.com/api/product/{id} => delete a specific item
+      const url = "https://striveschool-api.herokuapp.com/api/movies/";
+
+      window.onload = async () => {
+        let urlParams = new URLSearchParams(window.location.search);
+        id = urlParams.get("id");
+        if (id) {
+          let response = await fetch(url + id, {
+            headers: {  
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFlYWExOTA1NzIzZTAwMTdjMTYzMTIiLCJpYXQiOjE2MDUyODIzMjksImV4cCI6MTYwNjQ5MTkyOX0.x6ygjwj7G6sZZmprBQgrfn5TwOozvvRhUXHF4k4644A",
+
+             "Content-Type": "application/json",
+          }
+          }); // contacting the endpoint for a single event
+          let event = await response.json(); // transforming the response body in an usable object, asyncronous operation!
+          document.getElementById("name").value = event.name;
+          document.getElementById("description").value = event.description;
+          document.getElementById("category").value = event.category;
+          document.getElementById("imageURL").value = event.imgUrl;
+          
+        }
+      };
+      const handleSubmit = (e) => {
+        e.preventDefault(); // preventing the default browser event handling
+        submitEvent();
+      };
+
+      const submitEvent = async () => {
+        let spinner = document.querySelector("#loadingSpinner");
+        spinner.classList.toggle("d-none"); // showing the spinner
+
+        let myEvent = {
+          // gathering the data from the form, field by field
+          name: document.querySelector("#name").value,
+          description: document.querySelector("#description").value,
+          category: document.querySelector("#category").value,
+          imageUrl: document.querySelector("#imageURL").value,
+         
+        }
+        try {
+          let response;
+
+          if (id) {
+              response = await fetch(url + id, {
+              // our PUT request is made with the fetch method as well!
+              method: "PUT", // declaring the CRUD method
+              body: JSON.stringify(myEvent), // we need to stringify the JS object in order to send it
+              headers: {  
+             Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFlOTQ0YzA1NzIzZTAwMTdjMTYxMWEiLCJpYXQiOjE2MDUyNzY3NDgsImV4cCI6MTYwNjQ4NjM0OH0.qGXzQE1RyHPnKTZYDnK2N04ZXfms2qXW9rudLug_12k",
+             "Content-Type": "application/json",
+            },
+             });
+           } else {
+           response = await fetch(url, {
+             method: "POST", 
+             body: JSON.stringify(myEvent), 
+             headers: {  
+             Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmFlOTQ0YzA1NzIzZTAwMTdjMTYxMWEiLCJpYXQiOjE2MDUyNzY3NDgsImV4cCI6MTYwNjQ4NjM0OH0.qGXzQE1RyHPnKTZYDnK2N04ZXfms2qXW9rudLug_12k",
+             "Content-Type": "application/json",
+            },
+          });
+        }
+          if (response.ok) {
+            // checking the ok property which stores the successful result of the operation
+            spinner.classList.toggle("d-none")
+            alert(`Event ${id ? "updated" : "created"} successfully`);
+            location.assign("../index.html");
+          } else {
+            spinner.classList.toggle("d-none");
+            alert("Something went wrong!");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      // const saveEvent =
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
